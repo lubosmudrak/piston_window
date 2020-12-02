@@ -28,7 +28,7 @@ piston-texture = "0.8.0"
 shader_version = "0.7.0"
 
 
-pistoncore-glutin_window = {git = "https://github.com/mbrubeck/glutin_window",package = "pistoncore-glutin_window", rev = "c47a67900810a98ca38f650aa9537cc04e2fef51",optional = true }
+pistoncore-glutin_window = {git = "https://github.com/ZainlessBrombie/glutin_window",optional = true }
 
 [features]
 default = ["glutin"]

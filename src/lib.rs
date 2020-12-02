@@ -97,6 +97,7 @@ pub use shader_version::OpenGL;
 
 use gfx_graphics::{Gfx2d, GfxGraphics};
 use std::error::Error;
+use std::marker::PhantomData;
 use std::time::Duration;
 
 /// Actual device used by Gfx backend.
@@ -146,9 +147,9 @@ pub struct PistonWindow<W: Window> {
 extern crate glutin_window;
 #[cfg(feature = "glutin")]
 use glutin_window::GlutinWindow;
-/// Contains everything required for controlling window, graphics, event loop.
 #[cfg(feature = "glutin")]
-pub struct PistonWindow<W: Window = GlutinWindow> {
+/// Contains everything required for controlling window, graphics, event loop.
+pub struct PistonWindow<'a,W: Window = GlutinWindow<'a,>> {
     /// The window.
     pub window: W,
     /// GFX encoder.
@@ -166,15 +167,16 @@ pub struct PistonWindow<W: Window = GlutinWindow> {
     pub events: Events,
     /// The factory that was created along with the device.
     pub factory: gfx_device_gl::Factory,
+    phantom: PhantomData<&'a W>,
 }
 
-impl<W> BuildFromWindowSettings for PistonWindow<W>
+impl<'a,W> BuildFromWindowSettings for PistonWindow<'a,W>
 where
     W: Window + OpenGLWindow + BuildFromWindowSettings,
 {
     fn build_from_window_settings(
         settings: &WindowSettings,
-    ) -> Result<PistonWindow<W>, Box<dyn Error>> {
+    ) -> Result<PistonWindow<'a,W>, Box<dyn Error>> {
         // Turn on sRGB.
         let settings = settings.clone().srgb(true);
 
@@ -210,7 +212,7 @@ fn create_main_targets(
     (output_color, output_stencil)
 }
 
-impl<W> PistonWindow<W>
+impl<'a,W> PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -246,6 +248,8 @@ where
             g2d: g2d,
             events: events,
             factory: factory,
+            phantom: std::marker::PhantomData
+
         }
     }
 
@@ -348,7 +352,7 @@ where
     }
 }
 
-impl<W> Window for PistonWindow<W>
+impl<'a,W> Window for PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -378,7 +382,7 @@ where
     }
 }
 
-impl<W> AdvancedWindow for PistonWindow<W>
+impl<'a,W> AdvancedWindow for PistonWindow<'_,W>
 where
     W: AdvancedWindow,
 {
@@ -420,7 +424,7 @@ where
     }
 }
 
-impl<W> EventLoop for PistonWindow<W>
+impl<'a,W> EventLoop for PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -433,7 +437,7 @@ where
     }
 }
 
-impl<W> Iterator for PistonWindow<W>
+impl<'a,W> Iterator for PistonWindow<'_,W>
 where
     W: Window,
 {
