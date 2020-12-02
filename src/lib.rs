@@ -171,15 +171,16 @@ pub struct PistonWindow<W: Window = GlutinWindow>{
     pub events: Events,
     /// The factory that was created along with the device.
     pub factory: gfx_device_gl::Factory,
+    phantom: PhantomData<&'a W>,
 }
 
-impl<W> BuildFromWindowSettings for PistonWindow<W>
+impl<'a,W> BuildFromWindowSettings for PistonWindow<'a,W>
 where
     W: Window + OpenGLWindow + BuildFromWindowSettings,
 {
     fn build_from_window_settings(
         settings: &WindowSettings,
-    ) -> Result<PistonWindow<W>, Box<dyn Error>> {
+    ) -> Result<PistonWindow<'a,W>, Box<dyn Error>> {
         // Turn on sRGB.
         let settings = settings.clone().srgb(true);
 
@@ -215,7 +216,7 @@ fn create_main_targets(
     (output_color, output_stencil)
 }
 
-impl<W> PistonWindow<W>
+impl<'a,W> PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -354,7 +355,7 @@ where
     }
 }
 
-impl<W> Window for PistonWindow<W>
+impl<'a,W> Window for PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -384,7 +385,7 @@ where
     }
 }
 
-impl<W> AdvancedWindow for PistonWindow<W>
+impl<'a,W> AdvancedWindow for PistonWindow<'_,W>
 where
     W: AdvancedWindow,
 {
@@ -426,7 +427,7 @@ where
     }
 }
 
-impl<W> EventLoop for PistonWindow<W>
+impl<'a,W> EventLoop for PistonWindow<'_,W>
 where
     W: Window,
 {
@@ -439,7 +440,7 @@ where
     }
 }
 
-impl<W> Iterator for PistonWindow<W>
+impl<'a,W> Iterator for PistonWindow<'_,W>
 where
     W: Window,
 {
