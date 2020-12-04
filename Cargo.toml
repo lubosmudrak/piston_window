@@ -22,8 +22,8 @@ name = "piston_window"
 gfx = "0.18.1"
 gfx_device_gl = "0.16.2"
 piston = "0.52.0"
-piston2d-gfx_graphics = "0.72.0"
-piston2d-graphics = "0.39.0"
+piston2d-gfx_graphics = {git = "https://github.com/lubosmudrak/gfx_graphics", rev = "d9001d7b923b270ef23af2e7a267b2eb28bd2a7c"}
+piston2d-graphics = {git = "https://github.com/lubosmudrak/graphics", rev = "f5a3e7b13785e21228cd5ff02a1aa9687f9a28b2"}
 piston-texture = "0.8.0"
 shader_version = "0.7.0"
 
