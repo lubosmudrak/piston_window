@@ -171,7 +171,8 @@ pub struct PistonWindow<W: Window = GlutinWindow>{
     pub events: Events,
     /// The factory that was created along with the device.
     pub factory: gfx_device_gl::Factory,
-    phantom: PhantomData<&'a W>,
+
+    pub self_time: SelfTime<'a>,
 }
 
 impl<'a,W> BuildFromWindowSettings for PistonWindow<'a,W>
