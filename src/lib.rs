@@ -1,4 +1,4 @@
-#![deny(missing_docs)]
+//#![deny(missing_docs)]
 
 //! The official Piston window wrapper for the Piston game engine
 //!
@@ -80,6 +80,8 @@
 //! Instead, libraries should depend on the lower abstractions,
 //! such as the [Piston core](https://github.com/pistondevelopers/piston).
 
+mod self_time;
+
 extern crate gfx;
 extern crate gfx_device_gl;
 extern crate gfx_graphics;
@@ -94,6 +96,7 @@ pub use piston::event_loop::*;
 pub use piston::input::*;
 pub use piston::window::*;
 pub use shader_version::OpenGL;
+pub use self_time::SelfTime;
 
 use gfx_graphics::{Gfx2d, GfxGraphics};
 use std::error::Error;
@@ -149,6 +152,7 @@ extern crate glutin_window;
 use glutin_window::GlutinWindow;
 #[cfg(feature = "glutin")]
 /// Contains everything required for controlling window, graphics, event loop.
+// oprav ten wrapper podla tohto file:///C:/Users/lubos/github/SmallTime/target/doc/src/glutin_window/lib.rs.html#39-62
 pub struct PistonWindow<'a,W: Window = GlutinWindow<'a,>> {
     /// The window.
     pub window: W,
@@ -167,7 +171,8 @@ pub struct PistonWindow<'a,W: Window = GlutinWindow<'a,>> {
     pub events: Events,
     /// The factory that was created along with the device.
     pub factory: gfx_device_gl::Factory,
-    phantom: PhantomData<&'a W>,
+
+    pub self_time: SelfTime<'a>,
 }
 
 impl<'a,W> BuildFromWindowSettings for PistonWindow<'a,W>
@@ -248,7 +253,7 @@ where
             g2d: g2d,
             events: events,
             factory: factory,
-            phantom: std::marker::PhantomData
+            self_time: Default::default()
 
         }
     }
