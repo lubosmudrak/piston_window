@@ -153,7 +153,7 @@ use glutin_window::GlutinWindow;
 #[cfg(feature = "glutin")]
 /// Contains everything required for controlling window, graphics, event loop.
 // oprav ten wrapper podla tohto file:///C:/Users/lubos/github/SmallTime/target/doc/src/glutin_window/lib.rs.html#39-62
-pub struct PistonWindow<'a,W: Window = GlutinWindow<'a,>> {
+pub struct PistonWindow<W: Window = GlutinWindow>{
     /// The window.
     pub window: W,
     /// GFX encoder.
@@ -171,17 +171,15 @@ pub struct PistonWindow<'a,W: Window = GlutinWindow<'a,>> {
     pub events: Events,
     /// The factory that was created along with the device.
     pub factory: gfx_device_gl::Factory,
-
-    pub self_time: SelfTime<'a>,
 }
 
-impl<'a,W> BuildFromWindowSettings for PistonWindow<'a,W>
+impl<W> BuildFromWindowSettings for PistonWindow<W>
 where
     W: Window + OpenGLWindow + BuildFromWindowSettings,
 {
     fn build_from_window_settings(
         settings: &WindowSettings,
-    ) -> Result<PistonWindow<'a,W>, Box<dyn Error>> {
+    ) -> Result<PistonWindow<W>, Box<dyn Error>> {
         // Turn on sRGB.
         let settings = settings.clone().srgb(true);
 
@@ -217,7 +215,7 @@ fn create_main_targets(
     (output_color, output_stencil)
 }
 
-impl<'a,W> PistonWindow<'_,W>
+impl<W> PistonWindow<W>
 where
     W: Window,
 {
@@ -253,7 +251,6 @@ where
             g2d: g2d,
             events: events,
             factory: factory,
-            self_time: Default::default()
 
         }
     }
@@ -357,7 +354,7 @@ where
     }
 }
 
-impl<'a,W> Window for PistonWindow<'_,W>
+impl<W> Window for PistonWindow<W>
 where
     W: Window,
 {
@@ -387,7 +384,7 @@ where
     }
 }
 
-impl<'a,W> AdvancedWindow for PistonWindow<'_,W>
+impl<W> AdvancedWindow for PistonWindow<W>
 where
     W: AdvancedWindow,
 {
@@ -429,7 +426,7 @@ where
     }
 }
 
-impl<'a,W> EventLoop for PistonWindow<'_,W>
+impl<W> EventLoop for PistonWindow<W>
 where
     W: Window,
 {
@@ -442,7 +439,7 @@ where
     }
 }
 
-impl<'a,W> Iterator for PistonWindow<'_,W>
+impl<W> Iterator for PistonWindow<W>
 where
     W: Window,
 {
